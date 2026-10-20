@@ -1,0 +1,78 @@
+esphome:
+  name: quntis-light
+  friendly_name: Quntis Monitor Light
+  platformio_options:
+    board_build.cdc_on_boot: "1"
+
+esp32:
+  board: lolin_c3_mini
+  variant: esp32c3
+  framework:
+    type: arduino
+
+external_components:
+  - source: github://OWNER/REPO
+    components: [ quntis_rgb ]
+
+logger:
+
+api:
+  encryption:
+    key: !secret quntis_api_key
+
+ota:
+  - platform: esphome
+    password: !secret quntis_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "Quntis-Light Fallback Hotspot"
+
+captive_portal:
+
+quntis_rgb:
+  id: quntis
+  # Capture these from your own remote: see README, "Finding your remote's address"
+  address: [0xAA, 0x41, 0x5F, 0x98, 0xE7]
+  remote_id: [0x83, 0x3B, 0x67, 0x23]
+  # Defaults, shown for reference
+  # ce_pin: 1
+  # cs_pin: 5
+  # spi_clk_pin: 2
+  # spi_mosi_pin: 4
+  # spi_miso_pin: 3
+  # channels: [19, 53, 80]
+  # rx_channel: 53
+  # tx_repeats: 40
+
+light:
+  - platform: quntis_rgb
+    name: "Monitor Light"
+    # cold_white_color_temperature: 6500K
+    # warm_white_color_temperature: 3000K
+
+select:
+  - platform: quntis_rgb
+    name: "Backlight"
+    modes:
+      - "White"
+      - "Green / Red"
+      - "Green / Blue"
+      - "Yellow / Blue"
+      - "Yellow / Cyan"
+      - "Blue / Magenta"
+      - "Cyan / Magenta"
+      - "Rainbow"
+      - "Colour Cycle"
+      - "Red"
+      - "Green"
+      - "Blue"
+      - "Yellow"
+      - "Cyan"
+      - "Magenta"
+
+switch:
+  - platform: quntis_rgb
+    name: "Auto Brightness"

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 570" role="img" aria-label="Wiring diagram: underside of NRF24L01+PA+LNA to the underside of an ESP32-C3 Super Mini"><style>
+.wire{fill:none;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round}
+.halo{fill:none;stroke:#ffffff;stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+.silk{fill:#f1f5f2;font-family:Menlo,monospace;font-size:12px}
+.cap{fill:#5d676b;font-family:Helvetica,Arial,sans-serif;font-size:13px}
+</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+      <!-- NRF24L01+PA+LNA, underside (printed labels) up, header at the top -->
+      <rect x="110" y="110" width="260" height="370" rx="8" fill="#16181a" stroke="#3a3f44" stroke-width="2"/>
+      <rect x="128" y="117" width="224" height="76" rx="3" fill="#0c0d0e"/>
+      <rect x="120" y="197" width="240" height="46" fill="none" stroke="#f1f5f2" stroke-width="1.5"/>
+      <g class="silk" text-anchor="middle" style="font-size: 12px; font-weight: 600">
+        <text x="150" y="215">GND</text><text x="210" y="215">CE</text><text x="270" y="215">SCK</text><text x="330" y="215">MISC</text>
+        <text x="150" y="237">V+</text><text x="210" y="237">CSN</text><text x="270" y="237">MOSI</text><text x="330" y="237">RQ</text>
+      </g>
+      <g fill="#b9bec2" stroke="#6b7177" stroke-width="2">
+        <rect x="185" y="370" width="22" height="22"/><rect x="273" y="370" width="22" height="22"/>
+        <rect x="185" y="420" width="22" height="22"/><rect x="273" y="420" width="22" height="22"/>
+      </g>
+      <rect x="218" y="455" width="44" height="25" rx="3" fill="#d4a73a" stroke="#3b2d0c" stroke-width="2"/>
+      <rect x="222" y="480" width="36" height="48" rx="3" fill="#d4a73a" stroke="#3b2d0c" stroke-width="2"/>
+      <path d="M222 488 h36 M222 496 h36 M222 504 h36 M222 512 h36 M222 520 h36" stroke="#3b2d0c" stroke-width="1.5"/>
+      <text x="240" y="552" text-anchor="middle" class="cap">NRF24L01+PA+LNA, underside up (the side with the printed labels)</text>
+
+      <!-- ESP32-C3 Super Mini, underside up -->
+      <rect x="700" y="92" width="60" height="30" rx="6" fill="#9aa3a8"/>
+      <text x="730" y="86" text-anchor="middle" class="cap">USB-C</text>
+      <rect x="640" y="110" width="180" height="360" rx="10" fill="#1d3557"/>
+      <text x="730" y="300" text-anchor="middle" class="silk" style="opacity: .55">underside</text>
+      <g class="silk">
+        <text x="680" y="164">5V</text><text x="680" y="204">G</text><text x="680" y="244">3V3</text><text x="680" y="284">4</text>
+        <text x="680" y="324">3</text><text x="680" y="364">2</text><text x="680" y="404">1</text><text x="680" y="444">0</text>
+        <text x="780" y="164" text-anchor="end">5</text><text x="780" y="204" text-anchor="end">6</text>
+        <text x="780" y="244" text-anchor="end">7</text><text x="780" y="284" text-anchor="end">8</text>
+        <text x="780" y="324" text-anchor="end">9</text><text x="780" y="364" text-anchor="end">10</text>
+        <text x="780" y="404" text-anchor="end">20</text><text x="780" y="444" text-anchor="end">21</text>
+      </g>
+      <g fill="#d4a73a" stroke="#3b2d0c" stroke-width="3">
+        <circle cx="665" cy="160" r="7"/><circle cx="665" cy="200" r="7"/><circle cx="665" cy="240" r="7"/><circle cx="665" cy="280" r="7"/>
+        <circle cx="665" cy="320" r="7"/><circle cx="665" cy="360" r="7"/><circle cx="665" cy="400" r="7"/><circle cx="665" cy="440" r="7"/>
+        <circle cx="795" cy="160" r="7"/><circle cx="795" cy="200" r="7"/><circle cx="795" cy="240" r="7"/><circle cx="795" cy="280" r="7"/>
+        <circle cx="795" cy="320" r="7"/><circle cx="795" cy="360" r="7"/><circle cx="795" cy="400" r="7"/><circle cx="795" cy="440" r="7"/>
+      </g>
+      <text x="730" y="495" text-anchor="middle" class="cap">ESP32-C3 Super Mini, underside up</text>
+
+      <!-- wires: halo first, then colour. Outer header row is reached from above, inner row from below -->
+      <g>
+        <path class="halo" d="M795 160 H850 V520 H440 V330 H240 V175 H210"/>
+        <path class="wire" stroke="#ee7a1a" d="M795 160 H850 V520 H440 V330 H240 V175 H210"/>
+        <path class="halo" d="M665 200 H620 V50 H150 V135"/>
+        <path class="wire" stroke="#22272b" d="M665 200 H620 V50 H150 V135"/>
+        <path class="halo" d="M665 400 H590 V65 H210 V135"/>
+        <path class="wire" stroke="#d9a400" d="M665 400 H590 V65 H210 V135"/>
+        <path class="halo" d="M665 360 H560 V80 H270 V135"/>
+        <path class="wire" stroke="#2a9d55" d="M665 360 H560 V80 H270 V135"/>
+        <path class="halo" d="M665 320 H530 V95 H330 V135"/>
+        <path class="wire" stroke="#8b4fd6" d="M665 320 H530 V95 H330 V135"/>
+        <path class="halo" d="M665 280 H500 V300 H300 V175 H270"/>
+        <path class="wire" stroke="#1f6fd1" d="M665 280 H500 V300 H300 V175 H270"/>
+        <path class="halo" d="M665 240 H470 V360 H180 V175 H150"/>
+        <path class="wire" stroke="#d62828" d="M665 240 H470 V360 H180 V175 H150"/>
+      </g>
+
+      <!-- NRF header pins: outer row y=135 (board edge), inner row y=175 -->
+      <g fill="#d4a73a" stroke="#3b2d0c" stroke-width="3">
+        <rect x="142" y="127" width="16" height="16"/><circle cx="210" cy="135" r="8"/><circle cx="270" cy="135" r="8"/><circle cx="330" cy="135" r="8"/>
+        <circle cx="150" cy="175" r="8"/><circle cx="210" cy="175" r="8"/><circle cx="270" cy="175" r="8"/><circle cx="330" cy="175" r="8"/>
+      </g>
+
+      <!-- ESP pads over wire ends -->
+      <g fill="#d4a73a" stroke="#3b2d0c" stroke-width="3">
+        <circle cx="795" cy="160" r="7"/><circle cx="665" cy="200" r="7"/><circle cx="665" cy="240" r="7"/>
+        <circle cx="665" cy="280" r="7"/><circle cx="665" cy="320" r="7"/><circle cx="665" cy="360" r="7"/><circle cx="665" cy="400" r="7"/>
+      </g>
+    </svg>
