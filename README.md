@@ -11,6 +11,22 @@ In Home Assistant you get:
 - **Backlight**: Off or any of the 15 RGB modes, by name
 - **Auto Brightness**: the bar's light-sensor mode, on/off
 
+### Finer control than the remote
+
+The remote only offers **4 brightness steps and 4 colour temperature steps**. The bar itself accepts
+any value from 1 to 255 for both, and Home Assistant uses that full range:
+
+| | Remote | Home Assistant |
+|---|---|---|
+| Brightness | 4 steps | stepless, 255 levels |
+| Lowest brightness | the remote's minimum step | noticeably dimmer: values below the remote's minimum work |
+| Colour temperature | 4 steps | stepless across the whole range |
+| Changing level | one tap per step | jump straight to any value |
+
+That makes Home Assistant the better way to set brightness, especially for a very dim
+night-time setting the remote can't reach. You can still use the remote at any time;
+Home Assistant follows it.
+
 ## Status
 
 | Feature | State |
@@ -73,8 +89,16 @@ describes the whole method.
 ## ESPHome setup
 
 Copy [`example-esphome-config.yaml`](example-esphome-config.yaml), set your `address` and
-`remote_id`, and point `external_components` at this repository (or copy
-[`components/quntis_rgb`](components/quntis_rgb) next to your config and use `type: local`).
+`remote_id`, and keep the `external_components` entry pointing at this repository:
+
+```yaml
+external_components:
+  - source: github://atr0s/quntis-curved-rgb-esphome
+    components: [ quntis_rgb ]
+```
+
+To modify the component, copy [`components/quntis_rgb`](components/quntis_rgb) next to your
+config and use `type: local` instead.
 The backlight mode names in `modes:` are just labels, so rename them to whatever you like.
 
 Notes:
