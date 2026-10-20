@@ -19,7 +19,7 @@ In Home Assistant you get:
 | Backlight modes and backlight off | working |
 | Auto-brightness on/off | working |
 | Brightness below the remote's lowest step | working (the bar is stepless) |
-| Home Assistant following the physical remote | implemented, **not yet verified** |
+| Home Assistant following the physical remote | working |
 | Colour temperature range in Kelvin | uses Quntis's 3000–6500K; a phone meter measured about 4000–6000K |
 | Other Quntis models | untested. The older PRO+ uses a different protocol; see [the original project](https://github.com/bluemaex/Quntis-LED-Controller) |
 
@@ -111,7 +111,7 @@ curved RGB bar's remote speaks a different protocol on the same kind of chip.
 | Calibration | needed, can drift out of sync | none, can't drift |
 | RGB backlight | n/a | 15 modes + off |
 | Auto-brightness | n/a | on/off |
-| Remote → Home Assistant | no (transmit only) | listens and syncs (implemented, not yet verified) |
+| Remote → Home Assistant | no (transmit only) | listens and syncs |
 | RF24 library | patched fork for XN297 register access | stock RF24; XN297 framing done in software |
 | Finding the address | sniffer fixed to channel 2 | channel sweep + capture + CRC solver |
 
