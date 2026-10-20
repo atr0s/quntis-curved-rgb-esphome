@@ -39,6 +39,8 @@ Home Assistant follows it.
 | Colour temperature range in Kelvin | uses Quntis's 3000–6500K; a phone meter measured about 4000–6000K |
 | Other Quntis models | untested. The older PRO+ uses a different protocol; see [the original project](https://github.com/bluemaex/Quntis-LED-Controller) |
 
+Setting this up with an AI coding agent? Point it at [AGENTS.md](AGENTS.md).
+
 ## Hardware
 
 - ESP32-C3 Super Mini
