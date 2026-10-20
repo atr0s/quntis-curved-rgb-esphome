@@ -34,9 +34,9 @@ captive_portal:
 
 quntis_rgb:
   id: quntis
-  # Capture these from your own remote: see README, "Finding your remote's address"
-  address: [0xAA, 0x41, 0x5F, 0x98, 0xE7]
-  remote_id: [0x83, 0x3B, 0x67, 0x23]
+  # Placeholders: capture your own remote's values (README, "Finding your remote's address")
+  address: [0x00, 0x00, 0x00, 0x00, 0x00]
+  remote_id: [0x00, 0x00, 0x00, 0x00]
   # Defaults, shown for reference
   # ce_pin: 1
   # cs_pin: 5

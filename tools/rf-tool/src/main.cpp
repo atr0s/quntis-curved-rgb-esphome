@@ -6,7 +6,7 @@
 //                          report channels where packets (and repeats) are received
 //   q <ch>                 capture raw 32-byte frames on one channel at 1 Mbps
 //   a <addr10hex> <id8hex> set the address and remote ID used by 't'
-//                          (default AA415F98E7 833B6723)
+//                          (required before 't'; get both from tools/analysis/decode.py)
 //   t <cmd> <bright> <cct> <backlight> <mode> <ctr> [cycles]
 //                          build and transmit a frame (hex values) on channels 19/53/80
 //   x                      stop
@@ -22,8 +22,8 @@ static const int TX_CHANNELS[] = {19, 53, 80};
 
 RF24 radio(CE_PIN, CSN_PIN);
 enum Mode { IDLE, CAPTURE, SWEEP } mode = IDLE;
-uint8_t address[5] = {0xAA, 0x41, 0x5F, 0x98, 0xE7};
-uint8_t remote_id[4] = {0x83, 0x3B, 0x67, 0x23};
+uint8_t address[5] = {0};
+uint8_t remote_id[4] = {0};
 String line;
 
 static const char *rate_name(rf24_datarate_e r) { return r == RF24_250KBPS ? "250k" : r == RF24_1MBPS ? "1M" : "2M"; }

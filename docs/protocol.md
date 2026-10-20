@@ -12,7 +12,7 @@ with an nRF24L01+ listening to a real remote, and confirmed by transmitting gene
 | Data rate | 1 Mbps |
 | Channels | 19, 53 and 80 (2419 / 2453 / 2480 MHz); every press is repeated on all three, possibly also 83 |
 | Repeats | roughly 30–40 copies of each packet per channel per press |
-| Address | 5 bytes, `AA 41 5F 98 E7` on the remote we captured (likely unique per remote) |
+| Address | 5 bytes, probably unique per remote; capture yours with `tools/analysis/decode.py` |
 | Payload | 11 bytes |
 | CRC | CRC-16-CCITT (poly 0x1021), init `0xB5D2`, final XOR `0xF494`, over the scrambled address + payload |
 
@@ -46,7 +46,7 @@ address with CRC and auto-ack disabled, and carrying the 18 bytes above as its p
 
 | Byte | Field | Values |
 |---|---|---|
-| 0–3 | Remote ID | constant per remote (`83 3B 67 23` on ours) |
+| 0–3 | Remote ID | constant per remote |
 | 4 | Command | see below |
 | 5 | Main light brightness | `00` = main light off; `01`–`FF` stepless (the remote uses `1A 55 A9 FF`) |
 | 6 | Colour temperature | `00` warmest … `FF` coolest, stepless (the remote uses `00 47 A2 FF`) |
@@ -87,17 +87,21 @@ Auto-brightness on/off are separate commands, not a toggle, and the remote alter
 
 ### Example
 
-Power on, brightness `55`, colour temperature `A2`, backlight on in mode 9, counter `31`:
+For a made-up remote with address `12 34 56 78 9A` and remote ID `A1 B2 C3 D4`: power on, brightness `55`,
+colour temperature `A2`, backlight on in mode 9, counter `31`:
 
 ```
-payload  83 3B 67 23 31 55 A2 FF 89 31 29
-on air   04 29 14 AB 2F | 7D 39 80 C9 22 26 CD ED F8 62 8B | A9 7B
+payload  A1 B2 C3 D4 31 55 A2 FF 89 31 CB
+on air   79 C9 1D DE 97 | 39 A8 A5 26 22 26 CD ED F8 62 CC | 88 9D
          address        | payload                          | CRC
 ```
 
 ## Open questions
 
-- Whether the address and remote ID differ between units (almost certainly, but only one remote was captured)
+- Whether the address and remote ID differ between units. Quntis documents a pairing procedure
+  (power-cycle the bar, then hold the remote's power button for about 4 s within 12 s), which suggests
+  the bar learns each remote's identity. The pairing packet has not been captured yet; if it can be
+  replayed, an ESP could pair as its own remote without needing an original one
 - Whether the bar ever rejects a repeated or old counter value
 - What switching the main light off while the backlight is on does, when sent with byte 7 = `FF`
 - The real colour temperature range. Quntis says 3000–6500K; a phone app measured about 4000–6000K
