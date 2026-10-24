@@ -52,6 +52,10 @@ light:
     name: "Monitor Light"
     # cold_white_color_temperature: 6500K
     # warm_white_color_temperature: 3000K
+  # Optional: backlight on/off as a light; turning it on restores the last mode
+  - platform: quntis_rgb
+    type: backlight
+    name: "Backlight"
 
 select:
   - platform: quntis_rgb

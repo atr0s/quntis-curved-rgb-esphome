@@ -42,6 +42,11 @@ static uint16_t crc16(const uint8_t *data, size_t len) {
 void QuntisRgb::setup() {
   boot_ms_ = millis();
   counter_ = random_uint32() & 0xFF;
+  mode_pref_ = global_preferences->make_preference<uint8_t>(fnv1_hash("quntis_rgb_mode"));
+  uint8_t mode;
+  if (mode_pref_.load(&mode) && mode >= 1 && mode <= 15)
+    state_.mode = mode;
+  saved_mode_ = state_.mode;
 
   SPI.begin(clk_pin_, miso_pin_, mosi_pin_, cs_pin_);
   radio_ = new RF24(ce_pin_, cs_pin_);
@@ -178,6 +183,7 @@ void QuntisRgb::handle_remote_(const uint8_t *p) {
   state_.cct = p[6];
   state_.backlight = p[7] != 0;
   state_.mode = std::max(1, std::min(15, p[8] & 0x7F));
+  save_mode();
   counter_ = std::max(counter_, p[9]);
 
   if (auto_switch_ != nullptr && (p[4] == CMD_AUTO_ON || p[4] == CMD_AUTO_OFF))
@@ -188,8 +194,25 @@ void QuntisRgb::handle_remote_(const uint8_t *p) {
 void QuntisRgb::publish_state_() {
   if (light_ != nullptr)
     light_->publish_from_bar(state_);
+  publish_backlight_select();
+  publish_backlight_light();
+}
+
+void QuntisRgb::save_mode() {
+  if (state_.mode == saved_mode_)
+    return;
+  saved_mode_ = state_.mode;
+  mode_pref_.save(&saved_mode_);
+}
+
+void QuntisRgb::publish_backlight_select() {
   if (backlight_select_ != nullptr)
     backlight_select_->publish_from_bar(state_);
+}
+
+void QuntisRgb::publish_backlight_light() {
+  if (backlight_light_ != nullptr)
+    backlight_light_->publish_from_bar(state_);
 }
 
 light::LightTraits QuntisRgbLight::get_traits() {
@@ -237,14 +260,43 @@ void QuntisRgbLight::publish_from_bar(const BarState &s) {
   call.perform();
 }
 
+light::LightTraits QuntisBacklightLight::get_traits() {
+  auto traits = light::LightTraits();
+  traits.set_supported_color_modes({light::ColorMode::ON_OFF});
+  return traits;
+}
+
+void QuntisBacklightLight::write_state(light::LightState *state) {
+  bool on;
+  state->current_values_as_binary(&on);
+  auto &s = parent_->state();
+  if (on == s.backlight)
+    return;  // already the bar's state (e.g. echo of a remote press or select change)
+  s.backlight = on;
+  if (!parent_->booting())
+    parent_->send(CMD_BACKLIGHT);
+  parent_->publish_backlight_select();
+}
+
+void QuntisBacklightLight::publish_from_bar(const BarState &s) {
+  if (state_ == nullptr || state_->remote_values.is_on() == s.backlight)
+    return;
+  auto call = state_->make_call();
+  call.set_state(s.backlight);
+  call.perform();
+}
+
 void QuntisBacklightSelect::control(size_t index) {
   auto &s = parent_->state();
   s.backlight = index > 0;
-  if (index > 0)
+  if (index > 0) {
     s.mode = index;
+    parent_->save_mode();
+  }
   if (!parent_->booting())
     parent_->send(CMD_BACKLIGHT);
   this->publish_state(index);
+  parent_->publish_backlight_light();
 }
 
 void QuntisAutoSwitch::write_state(bool state) {

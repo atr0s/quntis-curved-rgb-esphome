@@ -9,6 +9,8 @@ In Home Assistant you get:
 
 - **Monitor Light**: on/off, stepless brightness and stepless colour temperature
 - **Backlight**: Off or any of the 15 RGB modes, by name
+- **Backlight light** (optional, `type: backlight`): on/off for the backlight that keeps the mode, so
+  "turn off all lights" covers it and turning it back on restores the last mode (kept across reboots)
 - **Auto Brightness**: the bar's light-sensor mode, on/off
 
 ### Finer control than the remote

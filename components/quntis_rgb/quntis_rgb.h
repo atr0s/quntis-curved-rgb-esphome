@@ -10,6 +10,7 @@
 #include "esphome/components/switch/switch.h"
 #include "esphome/core/component.h"
 #include "esphome/core/helpers.h"
+#include "esphome/core/preferences.h"
 
 class RF24;
 
@@ -37,6 +38,7 @@ struct BarState {
 };
 
 class QuntisRgbLight;
+class QuntisBacklightLight;
 class QuntisBacklightSelect;
 class QuntisAutoSwitch;
 
@@ -61,11 +63,16 @@ class QuntisRgb : public Component {
   void set_tx_repeats(uint8_t r) { tx_repeats_ = r; }
   void set_light(QuntisRgbLight *l) { light_ = l; }
   void set_backlight_select(QuntisBacklightSelect *s) { backlight_select_ = s; }
+  void set_backlight_light(QuntisBacklightLight *l) { backlight_light_ = l; }
   void set_auto_switch(QuntisAutoSwitch *s) { auto_switch_ = s; }
 
   BarState &state() { return state_; }
   // Queue a packet carrying the current state with the given command.
   void send(uint8_t cmd);
+  // Persist the backlight mode so it survives a reboot.
+  void save_mode();
+  void publish_backlight_select();
+  void publish_backlight_light();
   // Writes during boot come from state restoration; they update state but are not transmitted.
   bool booting() const { return millis() - boot_ms_ < 3000; }
 
@@ -87,6 +94,8 @@ class QuntisRgb : public Component {
   BarState state_;
   uint8_t counter_{0};
   uint32_t boot_ms_{0};
+  ESPPreferenceObject mode_pref_;
+  uint8_t saved_mode_{0};
 
   std::deque<std::array<uint8_t, 18>> queue_;
   int cycles_left_{0};
@@ -97,6 +106,7 @@ class QuntisRgb : public Component {
 
   QuntisRgbLight *light_{nullptr};
   QuntisBacklightSelect *backlight_select_{nullptr};
+  QuntisBacklightLight *backlight_light_{nullptr};
   QuntisAutoSwitch *auto_switch_{nullptr};
 };
 
@@ -116,6 +126,18 @@ class QuntisRgbLight : public light::LightOutput, public Parented<QuntisRgb> {
   light::LightState *state_{nullptr};
   float cold_mireds_{153.8f};
   float warm_mireds_{333.3f};
+};
+
+// Backlight on/off only; the mode is kept, so turning it on restores the last one.
+class QuntisBacklightLight : public light::LightOutput, public Parented<QuntisRgb> {
+ public:
+  light::LightTraits get_traits() override;
+  void setup_state(light::LightState *state) override { state_ = state; }
+  void write_state(light::LightState *state) override;
+  void publish_from_bar(const BarState &s);
+
+ protected:
+  light::LightState *state_{nullptr};
 };
 
 class QuntisBacklightSelect : public select::Select, public Parented<QuntisRgb> {
